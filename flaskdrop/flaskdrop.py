@@ -1,4 +1,5 @@
-from flask import Flask, render_template #render_template enables the html template
+from flask import Flask, render_template,url_for #render_template enables the html template
+                                                #url_for finds exact location of the url
 app=Flask(__name__) #the name of the application package
 
 posts=[
@@ -6,13 +7,13 @@ posts=[
           'author':'Gaius Gimoro',
           'title':'test blog 1',
           'content':'First test blog',
-          'date_posted':'March 8,2019'
+          'date_posted':'March 8, 2019'
      },
      {
           'author':'Raius Kimoro',
           'title':'test blog 2',
           'content':'Second test blog',
-          'date_posted':'March 8,2019'   
+          'date_posted':'March 8, 2019'   
      }
 ]
 
