@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    {% if title %}
-        <title>Flaskdrop - {{ title }} </title> 
-    {% else %}
-        <title>Flaskdrop</title>
-    {% endif %}
-</head>
-<body>
+<!--inheritance from about page and home-->
+<!--create block content to inherit home template and about template-->
+
+{% extends "layout.html" %}
+{% block content %}
     <h1>About Page</h1>
-</body>
-</html>
+{% endblock content %}
+
