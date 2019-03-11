@@ -1,4 +1,4 @@
-from flask import Flask, render_template,url_for #render_template enables the html template
+from flask import Flask, render_template,url_for,flash,redirect #render_template enables the html template
                                                 #url_for finds exact location of the url
 
 
@@ -25,7 +25,7 @@ posts=[
 
 @app.route('/')
 @app.route('/home') #@app.route enables functions for routing
-def jambo():
+def home():
     return render_template('home.html',posts=posts)#variable to have access t the template
 
 @app.route('/about')
@@ -35,6 +35,10 @@ def about():
 @app.route("/register",methods=['GET','POST'])
 def register():
      form=RegistrationForm()
+     if form.validate_on_submit():
+          flash('Account created for {form.username.data}!','success')
+          return redirect(url_for('home'))
+
      return render_template('register.html',title='Register',form=form)
      
 @app.route("/login")
