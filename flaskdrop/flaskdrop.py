@@ -1,41 +1,18 @@
 from flask import Flask, render_template,url_for,flash,redirect #render_template enables the html template
                                                 #url_for finds exact location of the url
 
-
 from forms import RegistrationForm,LoginForm
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+
+
 
 app=Flask(__name__) #the name of the application package
 
 app.config['SECRET_KEY']='88fe5c0981ba01f5b81bcdb8c12dad29'
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///site.db'
-
+app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///site.db' #creates database in the pc location
 db=SQLAlchemy(app)
 
-class User(db.Model):
-     id=db.Column(db.Integer,primary_key=True)
-     username=db.Column(db.String(20),unique=True,nullable=False)
-     email=db.Column(db.String(120),unique=True,nullable=False)
-     image_file=db.Column(db.String(20),nullable=False,default='default.jpg')  #default profile picture
-     password=db.Column(db.String(60),nullable=False)
-     posts=db.relationship('Post',backref='author',lazy=True)
-
-     def __repr__(self): #indicates how our project is printed whenever we print it out
-          return f"User('{self.username}','{self.email}','{self.image_file}')"
-
-class Post(db.Model):
-     id=db.Column(db.Integer,primary_key=True)
-     title=db.Column(db.String(100), nullable=False)
-     date_posted=db.Column(db.DateTime,nullable=False,default=datetime.utcnow)
-     content=db.Column(db.Text,nullable=False)
-
-     def __repr__(self): #indicates how our project is printed whenever we print it out
-          return f"User('{self.title}','{self.date_posted}')"
-
-
-
-
+from models import User,Post
 posts=[
      {
           'author':'Gaius Gimoro',
