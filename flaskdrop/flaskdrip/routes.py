@@ -2,7 +2,7 @@ from flaskdrip.forms import RegistrationForm,LoginForm
 from flask import Flask, render_template,url_for,flash,redirect
 from flaskdrip import app
 from flaskdrip.models import User,Post 
-
+ 
 posts=[
      {
           'author':'Gaius Gimoro',
