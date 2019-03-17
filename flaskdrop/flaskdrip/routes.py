@@ -5,6 +5,7 @@ from flaskdrip.models import User,Post
 from flask_login import login_user,current_user,logout_user,login_required
 import secrets
 import os
+from PIL import Image
 
 posts=[
      {
@@ -71,7 +72,11 @@ def save_picture(form_picture): #saving picture
      _,f_ext=os.path.splitext(form_picture.filename)
      picture_fn=random_hex+f_ext #picture file name
      picture_path=os.path.join(app.root_path,'static/profile_pics',picture_fn)
-     form_picture.save(picture_path)
+
+     output_size=(125,125) #resize tuple
+     i=Image.open(form_picture)
+     i.thumbnail(output_size)
+     i.save(picture_path)
 
      return picture_fn
 
