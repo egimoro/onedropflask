@@ -1,5 +1,5 @@
-from flaskdrip.forms import RegistrationForm,LoginForm,UpdateAccountForm
-from flask import Flask, render_template,url_for,flash,redirect,request
+from flaskdrip.forms import RegistrationForm,LoginForm,UpdateAccountForm,PostForm
+from flask import Flask, render_template,url_for,flash,redirect,request,abort
 from flaskdrip import app,db,bcrypt
 from flaskdrip.models import User,Post 
 from flask_login import login_user,current_user,logout_user,login_required
@@ -7,25 +7,12 @@ import secrets
 import os
 from PIL import Image
 
-posts=[
-     {
-          'author':'Gaius Gimoro',
-          'title':'test blog 1',
-          'content':'First test blog',
-          'date_posted':'March 8, 2019'
-     },
-     {
-          'author':'Raius Kimoro',
-          'title':'test blog 2',
-          'content':'Second test blog',
-          'date_posted':'March 8, 2019'   
-     }
-]
 
 @app.route('/')
 @app.route('/home') #@app.route enables functions for routing
 def home():
-    return render_template('home.html',posts=posts)#variable to have access t the template
+     posts=Post.query.all()
+     return render_template('home.html',posts=posts)#variable to have access t the template
 
 @app.route('/about')
 def about():
@@ -100,3 +87,57 @@ def account():
      image_file=url_for('static',filename='profile_pics/' + current_user.image_file)
      return render_template('account.html',title='Account',image_file=image_file,
      form=form)
+
+@app.route('/post/new',methods=['GET','POST'])
+@login_required
+def new_post():
+     form=PostForm()
+     if form.validate_on_submit():
+          post=Post(title=form.title.data,content=form.content.data,author=current_user)
+          db.session.add(post)
+          db.session.commit()
+          flash('Your post has been created!','success')
+          return redirect(url_for('home'))
+     return render_template('create_post.html',title='New Post',form=form)
+
+
+@app.route('/post/<int:post_id>')
+def post(post_id):
+     post=Post.query.get_or_404(post_id)
+     return render_template('post.html',title='New Post',post=post,
+     legend='New Post')
+
+
+@app.route('/post/<int:post_id>/update',methods=['GET','POST'])
+@login_required
+def update_post(post_id):
+     post=Post.query.get_or_404(post_id)
+     if post.author !=current_user:
+          abort(403)
+     form=PostForm()
+     if form.validate_on_submit():
+          post.title=form.title.data
+          post.content=form.content.data
+          db.session.commit()
+          flash('Your post has been updated!','success')
+          return redirect(url_for('post',post_id=post.id))
+     elif request.method=='GET':
+          form.title.data=post.title
+          form.content.data=post.content
+     return render_template('create_post.html',title='Update Post',
+     form=form,legend='Update Post')
+
+@app.route('/post/<int:post_id>/delete',methods=['POST'])
+@login_required
+def delete_post(post_id):
+     post=Post.query.get_or_404(post_id)
+     if post.author !=current_user:
+          abort(403)
+     db.session.delete(post)
+     db.session.commit()
+     flash('Your post has been deleted!','success')
+     return redirect(url_for('home'))
+
+
+
+     
