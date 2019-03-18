@@ -1,4 +1,5 @@
-from flaskdrip.forms import RegistrationForm,LoginForm,UpdateAccountForm,PostForm
+from flaskdrip.forms import (RegistrationForm,LoginForm,UpdateAccountForm,PostForm,
+RequestResetForm,ResetPasswordForm)
 from flask import Flask, render_template,url_for,flash,redirect,request,abort
 from flaskdrip import app,db,bcrypt
 from flaskdrip.models import User,Post 
@@ -147,6 +148,20 @@ def user_posts(username):
           .order_by(Post.date_posted.desc()).paginate(page=page,per_page=1)
      return render_template('user_posts.html',posts=posts,user=user)#variable to have access to the template
 
+@app.route("/reset_password",methods=['GET','POST'])
+def reset_request():
+     if current_user.is_authenticated:
+          return redirect(url_for('home'))
+     form=RequestResetForm()
+     return render_template('reset_request.html',title='Reset Password',form=form)
 
-
-     
+@app.route("/reset_password/<token>",methods=['GET','POST'])
+def reset_token(token):
+     if current_user.is_authenticated:
+          return redirect(url_for('home'))  
+     user=User.verify_reset(token) 
+     if user is None:
+          flash('That is an invalid or expired token','warining')
+          return redirect(url_for('rest_request'))
+     form=ResetPasswordForm()
+     return render_template('reset_token.html',title='Reset Password',form=form)
