@@ -4,7 +4,8 @@ from flask import Flask, render_template,url_for,flash,redirect #render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-
+from flask_mail import Mail
+import os
 
 app=Flask(__name__) #the name of the application package
 
@@ -15,5 +16,11 @@ bcrypt=Bcrypt(app)
 login_manager=LoginManager(app)
 login_manager.login_view='login'
 login_manager.login_message_category='info'
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT']=587
+app.config['MAIL_USE_TLS']=True
+app.config['MAIL_USERNAME']=os.environ.get('lopingemma@gmail.com')
+app.config['MAIL_PASSWORD']=os.environ.get('floss4')
+mail=Mail(app)
 
 from flaskdrip import routes
