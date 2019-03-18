@@ -11,7 +11,8 @@ from PIL import Image
 @app.route('/')
 @app.route('/home') #@app.route enables functions for routing
 def home():
-     posts=Post.query.all()
+     page=request.args.get('page',1,type=int)
+     posts=Post.query.paginate(page=page,per_page=1)
      return render_template('home.html',posts=posts)#variable to have access t the template
 
 @app.route('/about')
