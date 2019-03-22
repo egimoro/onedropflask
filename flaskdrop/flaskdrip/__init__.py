@@ -19,8 +19,9 @@ login_manager.login_message_category='info'
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT']=587
 app.config['MAIL_USE_TLS']=True
-app.config['MAIL_USERNAME']=os.environ.get('lopingemma@gmail.com')
-app.config['MAIL_PASSWORD']=os.environ.get('floss4')
+app.config['MAIL_USERNAME']=os.environ.get('NotifyEmail')
+app.config['MAIL_PASSWORD']=os.environ.get('EMAIL_PASS')
 mail=Mail(app)
 
 from flaskdrip import routes
+
