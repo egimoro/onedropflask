@@ -20,8 +20,15 @@ app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT']=587
 app.config['MAIL_USE_TLS']=True
 app.config['MAIL_USERNAME']=os.environ.get('NotifyEmail')
-app.config['MAIL_PASSWORD']=os.environ.get('EMAIL_PASS')
+app.config['MAIL_PASSWORD']=os.environ.get('Password')
+app.config['ADMINS']=['lopingemma@gmail.com']
 mail=Mail(app)
 
-from flaskdrip import routes
+from flaskdrip.users.routes import users
+from flaskdrip.posts.routes import posts
+from flaskdrip.main.routes import main
+
+app.register_blueprint(users)
+app.register_blueprint(posts)
+app.register_blueprint(main)
 

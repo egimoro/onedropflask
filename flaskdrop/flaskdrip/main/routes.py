@@ -1,5 +1,6 @@
 from flask import Blueprint,request,render_template
 from flaskdrip.models import Post
+
 main=Blueprint('main',__name__)
 
 @main.route('/')
